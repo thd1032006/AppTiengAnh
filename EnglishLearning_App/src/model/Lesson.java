@@ -14,5 +14,8 @@ public class Lesson {
     public void setDescription(String description) { this.description = description; }
     
     @Override
-    public String toString() { return id + ". " + lessonName; }
+    public String toString() {
+        if (id == 0 && (lessonName == null || lessonName.isBlank())) return "-- Chọn lesson --";
+        return id + ". " + lessonName;
+    }
 }

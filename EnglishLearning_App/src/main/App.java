@@ -2,18 +2,28 @@ package main;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import java.awt.Font;
-import view.MainDashboard;
+import helper.DatabaseConnection;
+import view.LoginPanel;
 
 public class App {
     public static void main(String[] args) {
         System.setProperty("awt.useSystemAAFontSettings", "on");
         System.setProperty("swing.aatext", "true");
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 15));
-        } catch (Exception e) {}
 
-        SwingUtilities.invokeLater(() -> new MainDashboard().setVisible(true));
+        try {
+            Class<?> flatLaf = Class.forName("com.formdev.flatlaf.FlatLightLaf");
+            UIManager.setLookAndFeel(
+                (javax.swing.LookAndFeel) flatLaf.getDeclaredConstructor().newInstance()
+            );
+        } catch (ClassNotFoundException ignored) {
+            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+            catch (Exception ignored2) {}
+        } catch (Exception e) {
+            System.err.println("Loi L&F: " + e.getMessage());
+        }
+
+        DatabaseConnection.getConnection();
+
+        SwingUtilities.invokeLater(() -> new LoginPanel().setVisible(true));
     }
 }
